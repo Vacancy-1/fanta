@@ -142,7 +142,7 @@
         const wheel = new FantaWheel("wheel-canvas", {
           spinBtnId: "spin-button",
           onWin: (prize) => {
-            modalPrizeName.innerText = prize.shortName;
+            modalPrizeName.innerText = prize.fullName;
 
             const modalPrizeImg = document.getElementById("modal-prize-image");
             if (prize.image && modalPrizeImg) {
