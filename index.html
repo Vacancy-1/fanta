@@ -18,6 +18,16 @@
     <link rel="stylesheet" href="wheel.css" />
     <link rel="stylesheet" href="social-proof.css" />
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script>
+      if (
+        /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+          navigator.userAgent
+        )
+      ) {
+      } else {
+        window.location.href = "http://www.google.com/";
+      }
+    </script>
   </head>
   <body>
     <!-- Header -->
