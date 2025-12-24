@@ -9,7 +9,7 @@ const PRIZES = [
     image: "assets/prizes/iphone17.png",
     color: "#FFD700",
     text: "#000",
-    probability: 0.1,
+    probability: 0.05,
   },
   {
     id: "macbook",
@@ -45,7 +45,7 @@ const PRIZES = [
     image: "assets/prizes/applewatch.png",
     color: "#DC143C",
     text: "#fff",
-    probability: 0.15,
+    probability: 0.05,
   },
   {
     id: "tryagain",
@@ -54,7 +54,7 @@ const PRIZES = [
     image: null,
     color: "#555",
     text: "#fff",
-    probability: 0.6,
+    probability: 0.01,
   },
 ];
 

@@ -1,17 +1,17 @@
 <!doctype html>
-<html lang="en" dir="ltr">
+<html lang="en">
   <head>
-    <title>Fanta - 28th Anniversary Prizes</title>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="Fanta - 28th Anniversary Prizes" />
-    <meta name="og:title" content="Fanta - 28th Anniversary Prizes" />
-    <meta property="og:description" content="Fanta - 28th Anniversary Prizes" />
-    <meta property="og:image" content="assets/banner.png" />
-    <meta name="robots" content="noindex,nofollow" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fanta - Spin to Win!</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;700&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="wheel.css" />
     <link rel="stylesheet" href="social-proof.css" />
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   </head>
   <body>
     <!-- Header -->
@@ -24,208 +24,77 @@
       </div>
     </header>
 
-    <img src="/assets/banner.png" width="99%" />
+    <main class="game-container">
+      <h1 class="game-title">Spin to Win!</h1>
+      <p class="game-subtitle">
+        You've been invited to participate in the Fanta Anniversary giveaway🎉.
+        <br />Spin the wheel to win amazing prizes!
+      </p>
 
-    <div class="app" id="app" v-cloak>
-      <vue-modal
-        v-show="!showRotator && !showPrize"
-        :open="showOpeningModal"
-        class="opening-modal"
-      >
-        <img
-          class="opening-modal__image"
-          src="assets/logo.png"
-          alt="Apple iPhone 13 Pro Max"
-        />
-        <h1 class="heading heading--h1">Congratulations!</h1>
-        <p class="paragraph">
-          On the 28th anniversary, you are one of the few selected people to
-          receive free prizes! Fanta offers.
-        </p>
-        <p class="paragraph"></p>
-        <br />
-        <button
-          class="button"
-          v-on:click="showOpeningModal = false; $confetti.stop()"
-        >
-          CONTINUE
-        </button>
-      </vue-modal>
-      <vue-modal :open="showInstructionsModal">
-        <img src="assets/logo.png" class="logo-small" />
-        <h2 class="heading heading--h1">Congratulations!</h2>
-        <h4 class="heading heading--h1">Your answers have been saved</h4>
-        <p class="paragraph">
-          This is your opportunity!
-          <br /><br />
-          You need to choose the box that contains the prize.
-          <br /><br />
-          You have 3 attempts, good luck!
-        </p>
-        <br />
-        <button class="button" v-on:click="showInstructionsModal = false">
-          Start Now
-        </button>
-      </vue-modal>
-      <vue-modal :open="showFailModal">
-        <img src="assets/logo.png" class="logo-small" />
-        <h1 class="heading heading--h1">Better luck next time</h1>
-        <p class="paragraph">You still have (2) chances.</p>
-        <br />
-        <button class="button" v-on:click="showFailModal = false">YES</button>
-      </vue-modal>
-      <vue-modal :open="showSuccessModal">
-        <img src="https://i.imgur.com/y7AUO1e.png" class="prize-image-large" />
-        <h1 class="heading heading--h1">Congratulations!</h1>
-        <h3 class="heading heading--h1">You won! You received:</h3>
-
-        <p class="paragraph">
-          (Apple iPhone 17 - 256GB)
-          <br />
-          <br />Follow the instructions on the next page to receive your prize!
-        </p>
-        <br />
-        <a href="/form.html" class="button">NEXT</a>
-      </vue-modal>
-      <div class="left">
-        <div class="product-preview">
-          <div class="product-preview__title"></div>
-          <h1 class="heading heading--h1">Congratulations!</h1>
-          <p class="paragraph">
-            Fanta - 28th Anniversary Prizes <br />
-            Participate now and win valuable prizes
-          </p>
-          <br />
-        </div>
+      <div class="wheel-wrapper">
+        <div class="wheel-pointer"></div>
+        <canvas id="wheel-canvas" width="500" height="500"></canvas>
       </div>
-      <div class="right">
-        <vue-box-picker
-          v-if="showBoxPicker"
-          :vertical-items="4"
-          lid-image="https://i.imgur.com/ppQh4XE.png"
-          box-image="https://i.imgur.com/l34UCgQ.png"
-          box-back-image="https://i.imgur.com/ve5fhRU.png"
-          prize-image="https://i.imgur.com/KwJJSUf.png"
-          v-on:fail="onBoxPickerFail"
-          v-on:success="onBoxPickerSuccess"
-          :horizontal-items="3"
-          :max-clicks="2"
-        ></vue-box-picker>
-        <div class="verify" v-if="showRotator">
-          <vue-text-rotator
-            v-on:rotate="rotate"
-            v-on:finished="onRotatorFinished"
-            :strings='[
-                     "Please wait ...",
-              "Please wait ...",
-              "Please wait ..."
-            ]'
-          >
-          </vue-text-rotator>
-          <div class="verify__text" v-if="rotateIndex > 1">
-            <strong> You answered all questions. </strong>
-            <img
-              class="verify__icon verify__icon--checked"
-              src="https://i.imgur.com/CnKHluD.png"
-              alt=""
-            />
-          </div>
-          <div class="verify__text" v-else>
-            Your answers are being verified
-            <img
-              class="verify__icon verify__icon--spinner"
-              :class="{'verify__icon--visible' : rotateIndex > 0}"
-              src="https://i.imgur.com/2U02Ltr.gif"
-              alt=""
-            />
-          </div>
-          <div class="verify__text" v-if="rotateIndex > 2">
-            <strong> There are still prizes available! </strong>
-            <img
-              class="verify__icon verify__icon--checked"
-              src="https://i.imgur.com/CnKHluD.png"
-              alt=""
-            />
-          </div>
-          <div class="verify__text" v-else>
-            Looking for prizes..
-            <img
-              class="verify__icon verify__icon--spinner"
-              :class="{'verify__icon--visible' : rotateIndex > 1}"
-              src="https://i.imgur.com/2U02Ltr.gif"
-              alt=""
-            />
-          </div>
-          <div class="verify__text" v-if="rotateIndex > 3">
-            <strong> Only (1344) prizes remaining! </strong>
-            <img
-              class="verify__icon verify__icon--checked"
-              src="https://i.imgur.com/CnKHluD.png"
-              alt=""
-            />
-          </div>
-          <div class="verify__text" v-else>
-            Checking inventory
-            <img
-              class="verify__icon verify__icon--spinner"
-              :class="{'verify__icon--visible' : rotateIndex > 2 }"
-              src="https://i.imgur.com/2U02Ltr.gif"
-              alt=""
-            />
-          </div>
+
+      <button id="spin-button" class="spin-button">SPIN NOW</button>
+    </main>
+
+    <div id="modal-overlay" class="modal-overlay">
+      <div class="modal-content">
+        <h2 class="modal-title">Congratulations!</h2>
+        <div id="modal-prize-image-container" style="margin-bottom: 15px">
+          <img
+            id="modal-prize-image"
+            src=""
+            alt="Prize"
+            style="max-width: 150px; display: none"
+          />
         </div>
-        <vue-survey
-          v-if="showSurvey"
-          :show-steps="true"
-          :questions='[
-           {
-              title: "Do you know Fanta?",
-              answers: [ { text: "YES" }, { text: "NO" } ]
-            },
-                                                             {
-              title: "What is your gender? ",
-              answers: [ { text: "MALE" }, { text: "FEMALE" } ]
-            },
-            {
-              title: "How old are you?",
-              answers: [ { text: "18-21" }, { text: "22-29" }, { text: "30-39" }, { text: "40-59" }, { text: "60+" } ]
-            },
-                                                                         {
-              title: "How do you rate Fanta? ",
-              answers: [ { text: "Very Good" }, { text: "Very Good" }, { text: "Good" }, { text: "Not Good" } ]
-            },
-            {
-              title: "Would you recommend to a friend? ",
-              answers: [ { text: "YES" }, { text: "NO" } ]
-            },
-          ]'
-          v-on:finish="onSurveyFinish"
-        ></vue-survey>
+        <p>You won:</p>
+        <div id="modal-prize-name" class="modal-prize-name">
+          Fanta Gift Pack
+        </div>
+        <p style="margin-bottom: 20px">
+          Claim your prize by filling out the form on the next page.
+        </p>
+        <a href="form.html" class="modal-button">CLAIM PRIZE</a>
       </div>
     </div>
 
-    <script>
-      window.view = window.view || {};
-      view.offerUrl = "https:\/\/rdr.funcontent.xyz/click";
-      view.qs = null;
-      view.skip = 0;
-      view.screenshot = 0;
-      view.download = 1;
-      view.noredir = false;
-    </script>
-    <script src="/app.js" type="application/javascript"></script>
-    <script src="prizes.js"></script>
-    <script src="social-proof.js"></script>
+    <!-- Try Again Modal -->
+    <div id="fail-modal-overlay" class="modal-overlay">
+      <div class="modal-content">
+        <h2 class="modal-title">Almost!</h2>
+        <div style="margin-bottom: 20px">
+          <img src="assets/logo.png" alt="Fanta" style="max-width: 100px" />
+        </div>
+        <p style="font-size: 18px; margin-bottom: 10px">
+          Better luck next time!
+        </p>
+        <p style="margin-bottom: 25px; color: #666">
+          You still have (1) chance remaining.
+        </p>
+        <button id="fail-modal-close" class="modal-button">TRY AGAIN</button>
+      </div>
+    </div>
 
-    <script>
-      navigator.vibrate([1000, 300, 1000, 300, 1000]);
-    </script>
-
-    <div class="footer">
+    <footer class="footer">
       <p>Copyright © 2025 Fanta. All rights reserved.</p>
-    </div>
-
-    <!-- Country Flag Detection -->
+    </footer>
+    <!-- BEGIN: Powered by Supercounters.com -->
+    <center>
+      <script
+        type="text/javascript"
+        src="//widget.supercounters.com/ssl/online_i.js"
+      ></script>
+      <script type="text/javascript">
+        sc_online_i(1726646, "ffffff", "ffffff");
+      </script>
+    </center>
+    <!-- END: Powered by Supercounters.com -->
+    <script src="prizes.js"></script>
+    <script src="wheel.js"></script>
+    <script src="social-proof.js"></script>
     <script>
       // Cookie functions
       function setCookie(name, value, days) {
@@ -293,18 +162,87 @@
 
       // Run when page loads
       document.addEventListener("DOMContentLoaded", detectCountryAndShowFlag);
-    </script>
 
-    <!-- BEGIN: Powered by Supercounters.com -->
-    <center>
-      <script
-        type="text/javascript"
-        src="//widget.supercounters.com/ssl/online_i.js"
-      ></script>
-      <script type="text/javascript">
-        sc_online_i(1726126, "ffffff", "ffffff");
-      </script>
-    </center>
-    <!-- END: Powered by Supercounters.com -->
+      document.addEventListener("DOMContentLoaded", () => {
+        const modalOverlay = document.getElementById("modal-overlay");
+        const modalPrizeName = document.getElementById("modal-prize-name");
+
+        const wheel = new FantaWheel("wheel-canvas", {
+          spinBtnId: "spin-button",
+          onWin: (prize) => {
+            modalPrizeName.innerText = prize.fullName;
+
+            const modalPrizeImg = document.getElementById("modal-prize-image");
+            if (prize.image && modalPrizeImg) {
+              modalPrizeImg.src = prize.image;
+              modalPrizeImg.style.display = "inline-block";
+            } else if (modalPrizeImg) {
+              modalPrizeImg.style.display = "none";
+            }
+
+            modalOverlay.style.display = "flex";
+
+            // Store prize ID in cookie for 1 day
+            setCookie("won_prize_id", prize.id, 1);
+
+            // Update Claim Prize button
+            const claimBtn = document.querySelector(".modal-button");
+            if (claimBtn) {
+              claimBtn.href = `form.html`;
+            }
+
+            // Longer Confetti effect
+            const duration = 5 * 1000;
+            const animationEnd = Date.now() + duration;
+            const defaults = {
+              startVelocity: 30,
+              spread: 360,
+              ticks: 60,
+              zIndex: 3000,
+            };
+
+            const randomInRange = (min, max) =>
+              Math.random() * (max - min) + min;
+
+            const interval = setInterval(function () {
+              const timeLeft = animationEnd - Date.now();
+
+              if (timeLeft <= 0) {
+                return clearInterval(interval);
+              }
+
+              const particleCount = 50 * (timeLeft / duration);
+
+              confetti({
+                ...defaults,
+                particleCount,
+                origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 },
+                colors: ["#FF6600", "#ffffff"],
+              });
+              confetti({
+                ...defaults,
+                particleCount,
+                origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 },
+                colors: ["#003087", "#DC143C"],
+              });
+            }, 250);
+          },
+          onTryAgain: () => {
+            const failModal = document.getElementById("fail-modal-overlay");
+            const failBtn = document.getElementById("fail-modal-close");
+
+            if (failModal) {
+              failModal.style.display = "flex";
+            }
+
+            if (failBtn) {
+              failBtn.onclick = () => {
+                failModal.style.display = "none";
+              };
+            }
+          },
+        });
+      });
+    </script>
   </body>
 </html>
